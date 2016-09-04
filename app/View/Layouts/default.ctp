@@ -39,7 +39,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'http://facebook.com/masamunedochanh/' , array('target' => '_blank')); ?></h1>
+			<h1><?php echo $this->Html->link($cakeDescription, 'https://github.com/vienbk91/' , array('target' => '_blank')); ?></h1>
 		</div>
 		<div id="content">
 
