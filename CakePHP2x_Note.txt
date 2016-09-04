@@ -1,0 +1,469 @@
+//******************************************************************************************************************************************************************
+Một số chú ý về config , cài đặt tool
+Do trong Eclipse không hỗ trợ viết php với định dạng file ctp (cake template) , nên muốn sử dụng thì ta phải thêm định
+dạng này vào trong Editor PHP của Eclipse.
+Config Eclipse để có thể Type với file *.ctp
+Eclipse -> Windown -> Preferences -> General -> Content Type -> Text -> PHP Content Type -> Add -> thêm .ctp
+Save và Restart lại Eclipse
+
+//******************************************************************************************************************************************************************
+Bài 0: Môi trường cài đặt CakePHP 
+Môi trường cài đặt CakePHP:
++ Apache Server với mod_rewrite
++ PHP từ version 4.3.2 trở lên (cakePHP2.x thì PHP phiên bản chưa cần cao nhưng từ 3.x trở lên thì PHP version từ 5.4.9 trở lên)
++ Hệ quản trị csdl , mặc định trong cakePHP là hệ quản trị csdl là mysql , tuy nhiên bạn có thể sử dụng posgrer , oracel ,...
+
+Bạn có thể cài đặt riêng biệt từng thành phần trên cũng có thể cài đặt 1 webserver application chứa tất cả chúng như là wampserver, xamppserver,..
+
+Ở đây mình sử dụng xampp server
+Sau khi cài đặt xong bạn hãy copy source code cakePHP vào thư mục htdocs/
+và đặt tên folder đó là cakephp286 (Phiên bản cakePHP mình đang sử dụng là 2.8.6 nên đặt như vậy cho tiện, còn bạn đặt tên ra sao cũng được)
+
+Chạy locahost; localhost/cakephp286/
+
+Tại phiên bản cakePHP2.x thì khi chạy nó có 1 lỗi là 
+"Notice (1024): Please change the value of 'Security.salt' in APP/Config/core.php to a salt value specific to your application. "
+Như vậy ra hãy mở file core.php trong thư mục config và tìm đến :
+Configure::write('Security.salt', 'DYhG93b0qyJfIxfs2guVoUubWwvniR2G0FgaC9mi20160904'); // Thêm 1 chuỗi bất kì vào, ở đây mình thêm 20160904
+Configure::write('Security.cipherSeed', '7685930965745354249674968364520160904'); // Thêm 1 chuỗi bất kì vào, ở đây mình thêm 20160904
+
+Tiếp theo mình cần tạo 1 db và thực hiện kết nối để loại bỏ thông báo lỗi chưa có kết nối database
+Mở phpmyadmin ra và tạo 1 database có tên: cakephp286_db
+
+Sau đó mở file database.php trong thư mục config/database.php (copy database.php.default thành 1 file khác và có tên là database.php )
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'root',
+		'password' => '',
+		'database' => 'cakephp286_db',
+		'prefix' => '',
+		'encoding' => 'utf8', 
+	);
+//Chú ý khi config database trong cakePHP thì cần bỏ comment ở dòng 'endcoding' => 'utf-8' để hiển thị utf-8 khi có thao tác dữ liệu.
+	
+//******************************************************************************************************************************************************************
+Bài 1: Tổng quan về CakePHP
+1. Thư mục trong application cakephp
+
++ app: đây là phần quan trong nhất chứa tất cả các mã nguồn của chúng ta
+	++ Config: thư mục chứa file cấu hình của hệ thống như: 
+	   database(thông tin về hệ quản trị csdl , đăng nhập csdl , password) , 
+	   core(chứa thông tin về debug , quản lý admin , cache , session của chúng ta), 
+	   routes (quản lý url , viết lại url , chuyển hướng url trong web application,..)…
+	++ Console: hỗ trợ tự động sinh code qua command line(sẽ có một bài riêng).
+	++ Controller: chứa các controller và Component(tự tạo) quan trọng là file AppController.php
+	++ Lib: thư viện tự tạo của chúng ta
+	++ Locale: chứa file ngôn ngữ , sử dụng cho ứng dụng đa ngôn ngữ.
+	++ Model: chứa file Model và behavor, datasource
+	++ Plugin: chứa các gói mở rộng cho ứng dụng.
+	++ Test: tên thư mục đã nói lên tất cả rồi^^
+	++ tmp: đây là nơi chứa các tập tin tạm được tự động sinh ra của ứng dụng.
+	++ Vendor: chứa ứng dụng của bên thứ 3 giống thư mục vendors ở bên ngoài.
+	++ View: chứa các file giao diện hiển thị và Helper
+	++ webroot: chứa các tập tin tài liệu về hình ảnh, javascript, css, 
++ lib: trong này chứa phần mã nguồn, thư viện của Cakephp. Hiển nhiên chúng ta không nên đụng tới nếu không rõ về Cakephp.
++ plugins: chứa các thành phần mở rộng của ứng dụng.
++ vendors: là các ứng dụng bên thứ 3 có thể là phpmail, facebook….
+
+
+2. Quy ước đặt tên trong CakePHP
+
+※Tên file, tên class:
+– Tên file sử dụng chữ thường, viết hoa chữ cái phân cách các từ: CategoriesController.php, DataComponent.php, Category.php, SessionHelper.php.
+– Tên class viết hoa chữ cái đầu tiên của từ.
+– Xem cách đặt tên ở bảng dưới đây:
+-------------------------------------------------------------------------
+                    Tên file                     Tên Class              |
+Controller |	CategoriesController.php		CategoriesController    |
+Component  |	DataComponent.php				DataComponent           |
+Model      |	Category.php					Category                |
+Helper     |	SessionHelper.php				Session                 |
+-------------------------------------------------------------------------
+
+Quy ước về cơ sở dữ liệu và Model:
+– Tên các class trong Model phải ở dạng số ít và viết hoa chữ cái đầu tiên: Category, User…
+– Tên các bảng trong database phải là số nhiều: categories, users…
+
+Quy ước về Controller:
+– Tên lớp của controller phải ở dạng số nhiều viết hoa chữ cái đầu tiên, và phía sau cùng là chữ Controller.
+
+Quy ước về View: trong view được chia làm 2 cấp độ thư mục và file:
+– Tên thư mục phải tương ứng với controller.
+Ví dụ: NotesController -> tên folder: Notes
+– Tên file của View phải tương ứng với các phương thức trong controller đó.
+– Đuôi mở rộng của các file trong view là .ctp
+Ví dụ:
+<?php
+class CategoriesController extends AppController{
+   public function menu(){ //Content }
+   public function index(){ // Content }
+}
+?>
+Thì ta cũng phải có 2 file view tương ứng là menu.ctp và index.ctp
+
+Cấp thư mục
+---- Controller
+----|----NotesController.php
+---- Model
+----|----Note.php
+---- View
+----|----Notes
+----|----|-----index.ctp
+----|----|-----menu.ctp
+
+
+//******************************************************************************************************************************************************************
+Bài 2: Moldel - Controller - View
+
+Mô hình MVC là 1 mô hình thiết kế được sử dụng trong thiết kế phần mềm. Nó được xây dựng bởi 3 từ viết tắt:
++ Model : Mô tả dữ liệu của ứng dụng, trên model sẽ thiết lập quan hệ của dữ liệu
++ Controller: Xử lý dữ liệu từ view thông qua form , sử dụng Model để nhận các data tương ứng với request của người dùng 
+và trả nó về view 
++ View: Gửi request và nhận data từ Controller để hiển thị 
+
+Trong CakePHP có 1 thành phần gọi là Depatcher dùng để xác định xem request nhận được từ client sẽ do Controller nào xử lý 
+Client -> Controller--- 
+  |            |      |
+  |            |      Model 
+  |____View ___| 
+  
+  
++ Model: chứa các cài đặt về CSDL . Mỗi 1 table trong CSDL sẽ tương ứng với 1 Model trong project. 
+Các model sẽ chứa thông tin về các mối quan hệ giữa các bảng với nhau. 
+Trong model sẽ có 1 file mặc định là AppModel và các model sẽ được extends từ nó.
++ Controller: Là nơi xử lý các luồng làm việc trong project(xử lý các action mà chúng ta muốn thực hiện). 
+Sẽ làm nhiệm vụ liên lạc với Model để truy vấn dữ liệu và hiển thị nó ra View sau khi đã xử lý. 
+Nó cũng có 1 file mặc định là AppController và các controller khác cũng extends từ nó.
+Ngoài ra ta có thể sử dụng Conponent để hỗ trợ xử lý các action.
++ View: Là nơi chứa các layout dàn trang cho project web của chúng ta.
+Và các layout này sẽ được đặt trong thư mục Layout. 
+Mặc định sử dụng là layout dafault.ctp. 
+Tất cả các file view trong cakephp đều đặt tên có dạng *.ctp (cake template). 
+Khi mà các bạn muốn tạo 1 layout mới thì bắt buộc phải khai báo trong Controller mà bạn sử dụng. 
++ Element là thư mục chứa các file chứa các đoạn code html và php mà chúng ta sử dụng nhiều làn trong view. 
+Như vậy thay vì viết code nhiều lần trên view , thì ta chỉ viết 1 lần và lưu nó vào Element này.
+Như vậy khi chỉnh sửa thì ta cũng chỉ chỉnh sửa 1 lần trên file Element này. 
++ Error sẽ chứa các view template hiển thị lỗi như 400,500,404 not found. 
++ Thư mục helper sẽ chứa các file hỗ trợ tùy chỉnh các giao diện trong cakephp. 
+Mặc định CakePHP đã hỗ trợ một số Helper có sẵn.
+Như là Form helper, Html helper,.. 
+Ta cũng có thể tự viết helper và lưu nó trong thư mục Helper..
+
+Trong Controller ta cũng có thể sử dụng các Componel để xử lý các action mà bạn muốn.
+Còn trong Model có thể sử dụng Behavior để code , lập trình trên CakePHP 
+
+Tất cả các thư mục trong CakePHP thì trừ tmp và webroot thì các folder đều được viết hoa và các file trong đó cũng vậy.
+
+Tiếp theo ta sẽ đi làm demo đơn giản với CakePHP để hiểu hơn về mô hình làm việc MVC này: 
+
+CREATE TABLE IF NOT EXISTS notes (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  title varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  content text COLLATE utf8_unicode_ci NOT NULL,
+  created datetime DEFAULT NULL,
+  modified datetime DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+
+INSERT INTO notes (id, title, content, created, modified) VALUES
+(1, 'Cấu trúc và chức năng một số thư mục chính trong source code CakePHP', '- app: chứa source project\r\n  + Config: chứa toàn bộ nội dung config của website(core - debug, mã hóa, cache , admin, session; route - rewrite link; database...)\r\n  + Model: chứa các model tương ứng với các bảng trong csdl\r\n  + Controller: chứa controller, viết action xử lý trong controller\r\n  + View: chứa view và các layout dàn trang(Layouts, Errors, Elements...)\r\n  + webroot: chứa css, js, img\r\n  + Plugins\r\n  + Vendors\r\n  + Và một số thư mục khác\r\n- lib: chứa source cakephp(trong lib chứa Cake/)', '2013-01-13 09:12:48', '2013-03-04 01:47:37'),
+(2, 'Cài đặt CakePHP', 'Có 2 cách cài đặt là cài đặt theo cách thông thường bằng tay và cài đặt từ giao diện dòng lệnh.\r\nCài đặt bằng tay:\r\n  + down source code từ cakephp.org\r\n  + copy vào www của wamp\r\n  + tạo csdl\r\n  + edit file database.php\r\n  + edit file core.php\r\n- Cài đặt từ giao diện dòng lệnh:\r\n  + dùng 1 source code cakephp để làm thư mục gốc\r\n  + Thiết lập biến môi trường để chạy Cake Console\r\n  + Cài đặt CakePHP từ giao diện dòng lệnh', '2013-01-13 10:20:48', '2013-01-13 10:20:48'),
+(3, 'Mô hình MVC trong CakePHP', '- Giới thiệu sơ lược mô hình MVC\r\n- Chức năng của Model - View - Controller trong CakePHP\r\n- Cách thức hoạt động của Mô hình MVC trong CakePHP', '2013-01-13 09:12:48', '2013-01-28 12:57:40'),
+(4, 'Tạo website đơn giản bằng CakePHP - ChickenRain Notes', '- Tạo shortcut cake console\r\n- Tạo CSDL\r\n- Tạo thư mục project từ giao diện dòng lệnh\r\n- Tạo bảng notes trong DB bằng SQL\r\n- Insert thêm dữ liệu vào DB', '2013-01-13 12:10:09', '2013-01-13 12:10:09'),
+(5, 'Tạo trang index notes cho ChickenRain Notes', '- Tạo Model Note.php\r\n- Tạo controller NotesController.php\r\n- Viết function index() đặt trong NotesController:\r\n  + Dùng find(''all'') để lấy dữ liệu từ DB\r\n  + Gởi dữ liệu lên view thông qua set()\r\n- Tạo view index.ctp đặt trong View/Notes\r\n- Chạy thử', '2013-01-13 14:10:09', '2013-02-19 13:03:53');
+
+
+Trong thư mục app/Model/ tạo file Note.php (Tên file là số ít của tên table trong csdl , chữ cái đầu viết hoa ) với nội dung sau:
+Model là 1 class và tên class phải trùng với tên file, nghĩa là cũng là tên số ít của table trong csdl.
+
+app/Model/Note.php
+<?php
+App::uses('AppModel' , 'Model');
+class Note extends AppModel{
+	// public $useTable = false;
+    public $name = "Note"; // tên của Model Note (có cũng được mà không có thì CakePHP vẫn tự động hiểu đây là Note Model và dùng để xử lý thao tác với table notes)
+}
+?>
+
+Do nó extend AppModel nên ta cần khai báo AppModel bằng cách sử dụng
+App::uses('Tên class muốn sử dụng' , 'Thư mục chứa AppModel');
+
+Do mỗi Model sẽ đại diện cho 1 table trong csdl cho nên nếu ko sử dụng table thì ta cần khai báo 1 biến 
+	public $useTable = false;
+Còn nếu bạn có sử dụng table thì ko cần khai báo nó. 
+
+Trong thư mục app/Controller/ tạo file NotesController.php :
+Tên class trùng tên file nên ta sẽ tạo 1 class tên là NotesController
+app/Controller/NotesController.php 
+<?php
+App::uses( 'AppController', 'Controller' ) ;
+class NotesController extends AppController {
+	public function index() {
+		// Không có xử lý gì cả
+	}
+}
+?>
+
+Tiếp theo ta sẽ tạo 1 folder có tên Notes(giống tên Controller) là thư mục con trong View , và tạo 1 file: index.ctp
+/app/View/Notes/index.ctp
+<?php
+echo "Hello CakePHP , i'm beginer with cakePHP.";
+
+CakePHP đã thiết kế routing tự động gọi đến view tương ứng với tên method có trong controller
+khi ta nhập đường dẫn: http://localhost/project_name/controller_name/method_name/
+Ví dụ: http://localhost/cakephp286/notes/index/
+Kết quả sẽ hiển thị dòng text với nội dung như trên: Hello CakePHP , i'm beginer with cakePHP.
+
+Tiếp theo ta sẽ lấy dữ liệu từ database và hiển thị nó ra view 
+
+<?php
+App::uses( 'AppController', 'Controller' ) ;
+class NotesController extends AppController {
+	public function index() {
+        
+        // Thực hiện lấy tất cả data trong bảng users thông qua model User với lệnh find('all')
+		$notes = $this->Note->find('all');
+		
+		// Gán $data vào 1 biến tên là notes trong View/Notes/index.ctp
+		$this->set("notes" , $notes);
+	}
+}
+?>
+
+Làm sao để truyền data từ controller đến view
+Sửa nội dung file index.ctp
+<h2>Danh sach cac Note</h2>
+<?php 
+foreach ($notes as $item):
+?>
+<ul>
+	<li>
+		<?php
+			echo $item['Note']['title'];
+		?>
+	</li>  
+</ul>
+<?php 
+endforeach;
+?>
+
+Thực hiện truy cập đến URL: http://localhost/cakephp286/notes/index/ và xem kết quả
+
+//*****************
+// Chú ý
+//*****************
+
+Tại sao thẻ <h2> được gọi đến lại có css màu đỏ và kiểu font chữ như vậy ? Liệu ta muốn chỉnh sửa style của nó thì phải làm như thế nào ?
+Tất cả các file về js ,css đều được đặt trong thư mục webroot , ta có thể thấy 1 file css mặc định đang được sử dụng ở đây là: cake.generic.css
+Và nó được gọi đến từ Layout/default.ctp là file layout mặc định của cakephp.
+Không nên chỉnh sửa file cake.generic.css mặc định của cake mà nên tạo 1 file css mới và gọi đến nó.
+
+Như vậy ta có thể tự tạo cho riêng mình 1 file css riêng và gọi đến nó bằng cách tạo 1 file : mystyle.css trong thư mục webroot/css/ rồi khai báo nó
+vào trong app/Layout/default.ctp
+
+---app
+---|---Controller
+---|---|---NotesController.php
+---|---Model
+---|---|---Note.php
+---|---View
+---|---|---Notes
+---|---|---|---index.ctp
+---|---|---|---menu.ctp
+---|---|---Layout
+---|---|---|---default.ctp
+---|---webroot
+---|---|---cake.generic.css
+---|---|---mystyle.css
+
+Và sau đó ta đặt dòng code thiết lập css ngay dưới
+echo $this->Html->css('cake.generic'); // default
+echo $this->Html->css('mystyle'); // file css do mình tạo ra
+
+Chú ý là file css đặt dưới sẽ được ưu tiên sử dụng hơn file css ở trên, vì nếu ta đặt dòng mã trên ở phía trên thì cakephp sẽ nhận css mặc định do có độ
+ưu tiên cao hơn.
+
+//******************************************************************************************************************************************************************
+Bài 3: Truy vấn database đơn giản với CakePHP
+
+Tiếp tục với file NotesController.php và class NotesController ta tiếp tục phân tích và thử nghiệm các phương pháp truy vấn khác. 
+
+Ở bài trước ta sử dụng method find('all') để lấy ra tất cả các dữ liệu có trong bảng notes
+$notes = $this->Note->find('all');
+Như vậy SQL tương ứng với nó chính là:
+SELECT `Note`.`id`, `Note`.`title`, `Note`.`content`, `Note`.`created`, `Note`.`modified` FROM `cakephp286_db`.`notes` AS `Note` WHERE 1 = 1
+
+Tuy nhiên nếu trường hợp ta muốn tăng các điều kiện khi query lên thì ta phải làm thế nào ? Trong bài này sẽ nói sơ qua về các vấn đề đó
++ Order by thứ tự hiển thị theo ngày tạo tăng dần
+Mọi option được thêm vào sẽ được đặt trong 1 mảng array 
+$notes = $this->Note->find('all' , array(
+            'order' => array('Note.created' => 'asc')
+        ));
++ Lấy ra 1 số trường cụ thể chứ không lấy toàn bộ các trường ra nhằm giảm số lượng data phải xử lý
+$notes = $this->Note->find('all' , array(
+            'order' => array('Note.created' => 'asc') ,
+			'fields' => array('Note.id' , 'Note.title')
+        ));
+
+Bây giờ ta sẽ tạo ra trang view để hiển thị cho nội dung từng note 
+<h2>Danh sách ghi chú</h2>
+<?php 
+foreach ($notes as $item):
+?>
+<ul>
+<li>
+<?php
+    echo $this->Html->link($item['Note']['title'] , '/notes/view/' . $item['Note']['id'] , array('target' => '_blank'));
+?>
+</li>  
+</ul>
+<?php 
+endforeach;
+?>
+
+Ở đây ta sử helper Html->link của CakePHP để thay thế cho việc viết trực tiếp thẻ <a>
+$this->Html->link('tên link' , 'url' , option); // Các option sẽ được đặt trong 1 mảng với key là các thuộc tính, value là các option tương ứng thuộc tính 
+Như vậy ở đây mỗi khi click vào link title thì nó sẽ nhảy đến 1 newpage (do target='_blank') với url: http://localhost/cakephp286/notes/view/id ở đây id chính
+là các id tương ứng với từng note
+
+Bây giờ ta thử click vào từng note xem sao ? -> Báo lỗi missing action view()
+Như vậy ta cần tạo 1 action view() trong NotesController
+
+
+
+
+//******************************************************************************************************************************************************************
+
+<?php
+App::uses('AppController' , 'Controller');
+class NotesController extends  AppController{
+	public $name = "Notes"; // tên của Controller Note
+	
+	// Truy vấn không điều kiện
+	public function exam01(){
+		$data = $this->Note->find("all");
+		$this->set("data",$data);
+	}
+	
+	// Truy vấn có điều kiện 01 - Viết riêng thành 1 array điều kiện 
+	public function exam02() {
+		$conditions = array(
+				'conditions' => array(
+						'title LIKE' => "%PHP%"
+				) ,
+				'limit' => 5 ,
+				'order' => array(
+						'id DESC'
+				) ,
+		);
+		$data = $this->Note->find('all' , $conditions);
+		$this->set("data" , $data);
+		$this->render("exam01");
+	}
+	
+	// Truy vấn có điều kiện 02 - viết liền trong truy vấn
+	public function exam03() {
+		$data = $this->Note->find('all' , array(
+				'conditions' => array(
+						'description LIKE' => '%abc%'
+				),
+		));
+		
+		$this->set("data" , $data);
+		$this->render("exam01");
+	}
+	
+	// Truy vấn bằng query thực thi sql
+	public function exam04() {
+		$sql = "SELECT * FROM Notes WHERE description LIKE '%abc%' ";
+		$data = $this->Note->query($sql);
+		$this->set("data" , $data);
+	}
+}
+
+Trong ví dụ trên ta đã thực thi 3 kiểu truy vấn cơ bản thường sử dụng trong CakePHP
+* Truy vấn tất cả: (Việc thực thi bằng với câu lệnh: select * from Notes; trong SQL)
+$this->Note->find(“all”);
+Thực thi gọi tới Model Note và lấy tất cả dữ liệu trả về trong database.
+* Truy vấn có điều kiện
+$conditions = array (
+	'conditions' => array() ,
+	'limit' => $limit_row ,
+	'fields' => array() ,
+	'order' => array() ,
+);
+
+conditions nó là điều kiện lọc giống như phần where trong câu SQL
+limit giới hạn số lượng dữ liệu được lấy ra
+fields chỉ lấy các field được chỉ định
+order phần này là order by
+* Truy vấn với câu lênh SQL bình thường
+$sql = "";
+$result = $this->Note->query($sql);
+
+Nếu ta viết hàm thực thi bên trong model thì ta có thể viết như sau
+<?php 
+class Note extends AppModel {
+	public $name = "Note";
+
+	public function getData01() {
+		$sql = "select * from Notes where description like '%abc%'";
+		$result = $this->query($sql);
+		
+		return $result;
+	}
+	
+	public function getData02() {
+		return $this->find('all' , array(
+				'conditions' => array(
+						'description LIKE' => '%abc%' ,
+				) ,
+		));
+	}
+}
+
+<?php
+class NotesController extends AppController {
+	public function exam05() {
+		$result = $this->Note->getData();
+		$this->set("data" , $result);
+	}
+}
+
+- Các hàm truy vấn CSDL thực thi từ Controller:
++ $this->Note->find("all");
++ $this->Note->find("all",dieu_kien);
++ $this->Note->query(cau_truy_van_sql);
++ $this->Note->getNumRows();
+
+- Tạo các hàm truy vấn thực thi trong Model:
++ this->find('all');
++ this->find('all',dieu_kien);
++ this->query(cau_truy_van_sql);
++ this->getNumRows();
+
+
+//******************************************************************************************************************************************************************
+Bài 4: Phân trang trong CakePHP
+
+
+
+
+
+
+//******************************************************************************************************************************************************************
+Bài 5: Validate trong CakePHP
+
+
+
+
+//******************************************************************************************************************************************************************
+Bài 5: Validate trong CakePHP
+
+
+
+
+//******************************************************************************************************************************************************************
+Bài 5: Validate trong CakePHP
