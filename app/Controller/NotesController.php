@@ -51,11 +51,18 @@ class NotesController extends AppController {
 	public function add() {
 		if ($this->request->is('post')) {
 			$note = $this->request->data;
-			if ($this->Note->save($note)) {
-				$this->Flash->success('Tạo ghi chú thành công !');
-				$this->redirect(array('controller' => 'notes' , 'action' => 'index'));
+			$this->Note->set($note);
+			if ($this->Note->validates()) {
+				if ($this->Note->save($note)) {
+					$this->Flash->success('Tạo ghi chú thành công !');
+					$this->redirect(array('controller' => 'notes' , 'action' => 'index'));
+				} else {
+					$this->Flash->error('Thêm ghi chú thất bại ! Hãy thực hiện lại.');
+					$this->set('note' , $note);
+				}
 			} else {
-				$this->Flash->error('Thêm ghi chú thất bại ! Hãy thực hiện lại.');
+				$error = $this->Note->validationErrors;
+				$this->set('error' , $error);
 				$this->set('note' , $note);
 			}
 		}

@@ -25,14 +25,20 @@ function submitForm() {
 
 <h2>Thêm ghi chú mới</h2>
 <br />
-
 <form action="" method="post" name="addForm" id="addForm" onsubmit="return submitForm();" >
 <div style="padding: 10px;">
 <label style="font-weight: bold;font-size: medium;">Tiêu đề:</label>
+<font style="color: red;font-size: small;font-weight: bold;">
+<?php if (isset($error['title'][0])) { echo $error['title'][0]; } else { echo ""; }  ?>
+</font>
 <br><br>
 <input type="text" name="title" id="note_title" value="<?php if (isset($note['title'])) { echo $note['title'];} else { echo ""; } ?>" />
 <br><br>
-<label style="font-weight: bold;font-size: medium;">Nội dung ghi chú:</label><br>
+<label style="font-weight: bold;font-size: medium;">Nội dung ghi chú:</label>
+<font style="color: red;font-size: small;font-weight: bold;">
+<?php if (isset($error['content'][0])) { echo $error['content'][0]; } else { echo ""; }  ?>
+</font>
+<br><br>
 <textarea name="content" id="note_content" rows="8"><?php if (isset($note['content'])) { echo $note['content']; } else { echo ""; } ?></textarea>
 <br><br>
 <input type="submit" name="editBtn" id="editBtn" value="Lưu nội dung" />

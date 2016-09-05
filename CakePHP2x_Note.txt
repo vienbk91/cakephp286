@@ -610,18 +610,88 @@ ta cần khai báo sử dụng thư viện jquery như sau:
 echo $this->Html->script('jquery-3.1.0.min');
 Trong đó file js này ta sẽ download từ trên mạng và để vào thư mục webroot/js/jquery-3.1.0.min.js 
 
-
-
 Thế nhưng nếu cứ phải vào xem ghi chú mới sửa , xóa được note thì có vẻ bất tiện. Nên ta sẽ thêm vào ngay trang 
 chủ của phần hiển thị danh sách các ghi chú mục Sửa | Xóa bên cạnh tên ghi chú.
+Do các chức năng này đã được tạo sẵn trong NotesController nên ta chỉ việc tạo các đường dẫn trực tiếp gọi đến nó
 
+Ta sẽ chỉnh sửa nội dung của file view index.ctp như sau 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<script>
+function addNewNote() {
+    if (confirm('Bạn có muốn tạo thêm ghi chú mới ?')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+</script>
 
+<h2>Danh sách ghi chú</h2>
+<div>
+<?php 
+foreach ($notes as $item):
+?>
+<ul>
+<li>
+<?php
+    echo $this->Html->link($item['Note']['title'] , '/notes/view/' . $item['Note']['id'] , array('target' => '_self'));
+?> | 
+<?php 
+    echo $this->Html->link('Sửa' , '/notes/edit/' . $item['Note']['id'] , array(
+            'target' => '_self' ,
+            'class' => 'editNote'
+            
+    ));
+?> | 
+<?php 
+    echo $this->Html->link('Xóa' , '/notes/delete/' . $item['Note']['id'] , array(
+            'target' => '_self' ,
+            'class' => 'deleteNote'
+            
+    ));
+?>
 
+</li>  
+</ul>
+<?php 
+endforeach;
+?>
+</div>
+<div style="margin-top: 20px;" id="addNote">
+<?php echo $this->Html->link('>> Thêm ghi chú mới' , '/notes/add/' , array(
+        'target' => '_self' , 
+        'onclick' => 'return addNewNote();'
+)); ?>
+</div>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Ở đây ta thấy trong phần option của Html->link ta có sử dụng thêm 1 thuộc tính 'class' => 'tên_class'
+Đây chính là cách ta định nghĩa thêm class css tương ứng với thẻ <a> được tạo ra bởi Html->link 
+Ta thêm vào trong file mystyle.css như sau: 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# Định nghĩa class editNote có màu xanh và font chữ nhỏ
+.editNote {
+    color: green;
+    font-size: small;
+}
+# Định nghĩa class deleteNote có màu đỏ và font chữ nhỏ 
+.deleteNote {
+    color: red;
+    font-size: small;
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Phần tiếp theo ta sẽ tìm hiểu về xác thực dữ liệu trong CakePHP2.x
 
 Xác thực dữ liệu trong CakePHP
 Có 2 cách cơ bản
 1- Xác thực dữ liệu trong model , khi model thực hiện save dữ liệu bằng hàm save() , 
 thì cake sẽ kiểm tra các dữ liệu có hợp lệ hay không ? Nếu hợp lệ thì mới save.
+
+
+
+
+
 
 
 //******************************************************************************************************************************************************************

@@ -16,8 +16,23 @@ foreach ($notes as $item):
 <ul>
 <li>
 <?php
-    echo $this->Html->link($item['Note']['title'] , '/notes/view/' . $item['Note']['id'] , array('target' => '_blank'));
+	echo $this->Html->link($item['Note']['title'] , '/notes/view/' . $item['Note']['id'] , array('target' => '_self'));
+?> | 
+<?php 
+	echo $this->Html->link('Sửa' , '/notes/edit/' . $item['Note']['id'] , array(
+			'target' => '_self' ,
+			'class' => 'editNote'
+			
+	));
+?> | 
+<?php 
+	echo $this->Html->link('Xóa' , '/notes/delete/' . $item['Note']['id'] , array(
+			'target' => '_self' ,
+			'class' => 'deleteNote'
+			
+	));
 ?>
+
 </li>  
 </ul>
 <?php 

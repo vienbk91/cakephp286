@@ -14,3 +14,13 @@ ul , li {
 div#addNote a {
 	color: blue;
 }
+
+.editNote {
+	color: green;
+	font-size: small;
+}
+
+.deleteNote {
+	color: red;
+	font-size: small;
+}
