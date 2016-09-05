@@ -10,3 +10,7 @@ a {
 ul , li {
 	margin: 10px 12px;
 }
+
+div#addNote a {
+	color: blue;
+}
