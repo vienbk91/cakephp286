@@ -31,38 +31,38 @@ Tiếp theo mình cần tạo 1 db và thực hiện kết nối để loại b�
 Mở phpmyadmin ra và tạo 1 database có tên: cakephp286_db
 
 Sau đó mở file database.php trong thư mục config/database.php (copy database.php.default thành 1 file khác và có tên là database.php )
-	public $default = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
-		'password' => '',
-		'database' => 'cakephp286_db',
-		'prefix' => '',
-		'encoding' => 'utf8', 
-	);
+    public $default = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host' => 'localhost',
+        'login' => 'root',
+        'password' => '',
+        'database' => 'cakephp286_db',
+        'prefix' => '',
+        'encoding' => 'utf8', 
+    );
 //Chú ý khi config database trong cakePHP thì cần bỏ comment ở dòng 'endcoding' => 'utf-8' để hiển thị utf-8 khi có thao tác dữ liệu.
-	
+    
 //******************************************************************************************************************************************************************
 Bài 1: Tổng quan về CakePHP
 1. Thư mục trong application cakephp
 
 + app: đây là phần quan trong nhất chứa tất cả các mã nguồn của chúng ta
-	++ Config: thư mục chứa file cấu hình của hệ thống như: 
-	   database(thông tin về hệ quản trị csdl , đăng nhập csdl , password) , 
-	   core(chứa thông tin về debug , quản lý admin , cache , session của chúng ta), 
-	   routes (quản lý url , viết lại url , chuyển hướng url trong web application,..)…
-	++ Console: hỗ trợ tự động sinh code qua command line(sẽ có một bài riêng).
-	++ Controller: chứa các controller và Component(tự tạo) quan trọng là file AppController.php
-	++ Lib: thư viện tự tạo của chúng ta
-	++ Locale: chứa file ngôn ngữ , sử dụng cho ứng dụng đa ngôn ngữ.
-	++ Model: chứa file Model và behavor, datasource
-	++ Plugin: chứa các gói mở rộng cho ứng dụng.
-	++ Test: tên thư mục đã nói lên tất cả rồi^^
-	++ tmp: đây là nơi chứa các tập tin tạm được tự động sinh ra của ứng dụng.
-	++ Vendor: chứa ứng dụng của bên thứ 3 giống thư mục vendors ở bên ngoài.
-	++ View: chứa các file giao diện hiển thị và Helper
-	++ webroot: chứa các tập tin tài liệu về hình ảnh, javascript, css, 
+    ++ Config: thư mục chứa file cấu hình của hệ thống như: 
+       database(thông tin về hệ quản trị csdl , đăng nhập csdl , password) , 
+       core(chứa thông tin về debug , quản lý admin , cache , session của chúng ta), 
+       routes (quản lý url , viết lại url , chuyển hướng url trong web application,..)…
+    ++ Console: hỗ trợ tự động sinh code qua command line(sẽ có một bài riêng).
+    ++ Controller: chứa các controller và Component(tự tạo) quan trọng là file AppController.php
+    ++ Lib: thư viện tự tạo của chúng ta
+    ++ Locale: chứa file ngôn ngữ , sử dụng cho ứng dụng đa ngôn ngữ.
+    ++ Model: chứa file Model và behavor, datasource
+    ++ Plugin: chứa các gói mở rộng cho ứng dụng.
+    ++ Test: tên thư mục đã nói lên tất cả rồi^^
+    ++ tmp: đây là nơi chứa các tập tin tạm được tự động sinh ra của ứng dụng.
+    ++ Vendor: chứa ứng dụng của bên thứ 3 giống thư mục vendors ở bên ngoài.
+    ++ View: chứa các file giao diện hiển thị và Helper
+    ++ webroot: chứa các tập tin tài liệu về hình ảnh, javascript, css, 
 + lib: trong này chứa phần mã nguồn, thư viện của Cakephp. Hiển nhiên chúng ta không nên đụng tới nếu không rõ về Cakephp.
 + plugins: chứa các thành phần mở rộng của ứng dụng.
 + vendors: là các ứng dụng bên thứ 3 có thể là phpmail, facebook….
@@ -76,10 +76,10 @@ Bài 1: Tổng quan về CakePHP
 – Xem cách đặt tên ở bảng dưới đây:
 -------------------------------------------------------------------------
                     Tên file                     Tên Class              |
-Controller |	CategoriesController.php		CategoriesController    |
-Component  |	DataComponent.php				DataComponent           |
-Model      |	Category.php					Category                |
-Helper     |	SessionHelper.php				Session                 |
+Controller |    CategoriesController.php        CategoriesController    |
+Component  |    DataComponent.php               DataComponent           |
+Model      |    Category.php                    Category                |
+Helper     |    SessionHelper.php               Session                 |
 -------------------------------------------------------------------------
 
 Quy ước về cơ sở dữ liệu và Model:
@@ -182,7 +182,7 @@ app/Model/Note.php
 <?php
 App::uses('AppModel' , 'Model');
 class Note extends AppModel{
-	// public $useTable = false;
+    // public $useTable = false;
     public $name = "Note"; // tên của Model Note (có cũng được mà không có thì CakePHP vẫn tự động hiểu đây là Note Model và dùng để xử lý thao tác với table notes)
 }
 ?>
@@ -191,7 +191,7 @@ Do nó extend AppModel nên ta cần khai báo AppModel bằng cách sử dụng
 App::uses('Tên class muốn sử dụng' , 'Thư mục chứa AppModel');
 
 Do mỗi Model sẽ đại diện cho 1 table trong csdl cho nên nếu ko sử dụng table thì ta cần khai báo 1 biến 
-	public $useTable = false;
+    public $useTable = false;
 Còn nếu bạn có sử dụng table thì ko cần khai báo nó. 
 
 Trong thư mục app/Controller/ tạo file NotesController.php :
@@ -200,9 +200,9 @@ app/Controller/NotesController.php
 <?php
 App::uses( 'AppController', 'Controller' ) ;
 class NotesController extends AppController {
-	public function index() {
-		// Không có xử lý gì cả
-	}
+    public function index() {
+        // Không có xử lý gì cả
+    }
 }
 ?>
 
@@ -221,14 +221,20 @@ Tiếp theo ta sẽ lấy dữ liệu từ database và hiển thị nó ra view
 <?php
 App::uses( 'AppController', 'Controller' ) ;
 class NotesController extends AppController {
-	public function index() {
+    public function index() {
         
         // Thực hiện lấy tất cả data trong bảng users thông qua model User với lệnh find('all')
-		$notes = $this->Note->find('all');
-		
-		// Gán $data vào 1 biến tên là notes trong View/Notes/index.ctp
-		$this->set("notes" , $notes);
-	}
+        $notes = $this->Note->find('all');
+        
+        // Test result data
+        /*
+        pr($notes); // Như vậy ta có thể thấy mảng sẽ trả về các mảng -> trong view cần dùng foreach để hiển thị 
+        exit; // Thêm exit vào để chương trình sẽ stop tại đây mà không thông báo lỗi thiếu view (do chưa tạo file trong view tương ứng)
+        */
+        
+        // Gán $data vào 1 biến tên là notes trong View/Notes/index.ctp
+        $this->set("notes" , $notes);
+    }
 }
 ?>
 
@@ -239,11 +245,11 @@ Sửa nội dung file index.ctp
 foreach ($notes as $item):
 ?>
 <ul>
-	<li>
-		<?php
-			echo $item['Note']['title'];
-		?>
-	</li>  
+    <li>
+        <?php
+            echo $item['Note']['title'];
+        ?>
+    </li>  
 </ul>
 <?php 
 endforeach;
@@ -304,7 +310,7 @@ $notes = $this->Note->find('all' , array(
 + Lấy ra 1 số trường cụ thể chứ không lấy toàn bộ các trường ra nhằm giảm số lượng data phải xử lý
 $notes = $this->Note->find('all' , array(
             'order' => array('Note.created' => 'asc') ,
-			'fields' => array('Note.id' , 'Note.title')
+            'fields' => array('Note.id' , 'Note.title')
         ));
 
 Bây giờ ta sẽ tạo ra trang view để hiển thị cho nội dung từng note 
@@ -330,57 +336,342 @@ là các id tương ứng với từng note
 
 Bây giờ ta thử click vào từng note xem sao ? -> Báo lỗi missing action view()
 Như vậy ta cần tạo 1 action view() trong NotesController
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public function view($id = null) {
+    // Kiểm tra id truyền vào có tồn tại trong note nào hay không bằng cách sử dụng 
+    $this->Note->id = $id;
+    if ($this->Note->exists()) { // Kiểm tra note này có tồn tại trong csdl hay không 
+        // Cách 1: Sử dụng findById($id) để lấy note
+        $note_1 = $this->Note->findById($id); // Trả về tất cả data có id = $id truyền vào
+        // Cách 2: Sử dụng hàm read(tên trường muốn lấy , id đưa vào). Trong trường hợp muốn lấy các trường thì ta truyền vào null 
+        $note_2 = $this->Note->read(null , $id);
+        $this->set('note' , $note_2); // Đẩy data ra view thông qua 1 biến tên là $note
+    } else { // Trong trường hợp ko tồn tại note có id như id truyền vào thì ta sẽ đưa ra 1 ngoại lệ 
+        throw new NotFoundException('Không tồn tại ghi chú này!');
+    }
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Bây giờ ta sẽ sử tạo view bằng cách tạo 1 file app/View/Notes/view.ctp có nội dung: 
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<script>
+function editNote() {
+    if (confirm('Bạn có muốn chỉnh chửa nội dung ghi chú ?')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+</script>
+
+<h2><?php echo $note['Note']['title']; ?></h2>
+<br /><br />
+<div style="padding-left: 10px;">
+<?php echo str_replace("\n" , '<br>' , $note['Note']['content']); ?>
+</div>
+
+<div style="font-size: small;margin-top: 10px;">
+Ngày tạo: <?php echo $note['Note']['created']; ?> <br />
+Ngày chỉnh sửa: <?php echo $note['Note']['modified']; ?>
+</div>
+
+<div style="margin-top: 20px;">
+<?php echo $this->Html->link('Quay lại trang chủ' , '/notes/' , array('target' => '_self')); ?> 
+&nbsp;&nbsp;| &nbsp;&nbsp;
+<?php echo $this->Html->link(
+        'Chỉnh sửa nội dung ghi chú' , 
+        '/notes/edit/' . $note['Note']['id'] , 
+        array(
+                'target' => '_self' , 
+                'onclick' => 'return editNote();'
+        )); ?>
+</div>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+Tiếp theo ta sẽ tạo 1 action edit() trong NotesController
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public function edit($id = null) {
+    $this->Note->id = $id;
+    
+    if ($this->Note->exists()) {
+        // Kiểm tra request method: Khi có sự kiện submit từ form thì nó sẽ sử dụng post 
+        // Không có submit nó sẽ dùng phương thức get 
+        //pr($this->request->method());
+        if ($this->request->is('post')) { // Nếu có submit từ form 
+            $note = $this->request->data; // Lấy toàn bộ data từ form
+            // pr($note);
+            if ($this->Note->save($note)) { // Sử dụng hàm save() để lưu mọi thay đổi 
+                // Sau khi được lưu thì hãy chuyển nó về trang index
+                $this->redirect(array('controller' => 'notes' , 'action' => 'index'));
+            } else {
+                // Nếu không lưu được thì hiển thị thông báo lỗi 
+                // Ở đây ta sử dụng FlashComponent để thực hiện việc hiển thị message
+                $this->Flash->error('Không thể thay đổi được nội dung ! Hãy thực hiện lại.');
+                $note = $this->Note->findById($id);
+                $this->set('note' , $note);
+            }
+        } else { // Khi vào edit nó sẽ nhảy vào đây nên ta cần bind data note có id tương ứng $id ra view
+            $note = $this->Note->findById($id);
+            $this->set('note' , $note);
+        }
+    } else {
+        throw new NotFoundException('Không tìm thấy ghi chú này!');
+    }
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Tiếp theo ta sẽ đi tạo thêm chức năng add note 
+Như vậy ta cần chỉnh sửa 1　chút ở phần view /app/View/Notes/index.ctp
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<script>
+function addNewNote() {
+    if (confirm('Bạn có muốn tạo thêm ghi chú mới ?')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+</script>
+
+<h2>Danh sách ghi chú</h2>
+<div>
+<?php 
+foreach ($notes as $item):
+?>
+<ul>
+<li>
+<?php
+    echo $this->Html->link($item['Note']['title'] , '/notes/view/' . $item['Note']['id'] , array('target' => '_blank'));
+?>
+</li>  
+</ul>
+<?php 
+endforeach;
+?>
+</div>
+<div style="margin-top: 10px;" id="addNote">
+<?php echo $this->Html->link('Thêm ghi chú mới' , '/notes/add/' , array(
+        'target' => '_self' , 
+        'onclick' => 'return addNewNote();'
+)); ?>
+</div>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Nhưng mà font nhìn có vẻ xấu nhỉ :) Ta thêm css vào như sau: 
+div#addNote a {
+    color: blue;
+}
+Bản chất của Html->link chính là tạo ra 1 thẻ <a> nên ta sẽ định nghĩa nó trong css và bây giờ có thể xem kết quả
+http://localhost/cakephp286/notes/
+
+Ta tạo 1 action add() như sau:
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+public function add() {
+    // Khi vào trong action này, do request method lúc này sẽ là GET (không có form submit)
+    nên cakephp sẽ tự động hiểu và load file app/View/Notes/add.ctp
+    
+    // Sau khi form submit
+    if ($this->request->is('post')) {
+        $note = $this->request->data; // Lấy tất cả dữ liệu trong form (dữ liệu kiểu mảng với key chính là input name )
+        if ($this->Note->save($note)) { // Thực hiện save dữ liệu vào database
+            $this->Flash->success('Tạo ghi chú thành công !');
+            $this->redirect(array('controller' => 'notes' , 'action' => 'index'));
+        } else {
+            $this->Flash->error('Thêm ghi chú thất bại ! Hãy thực hiện lại.');
+            $this->set('note' , $note); // Nếu thất bại thì hiển thị dữ liệu đã nhập trước đó cùng với thông báo sử dụng FlashComponent
+        }
+    }
+}
+
+File app/View/Notes/add.ctp
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<script type="text/javascript">
+function submitForm() {
+
+    var title = document.getElementById("note_title");
+    if (title.value == "" ) {
+        alert('Tiêu đề không được để trống ! Hãy nhập vào !');
+        title.focus();
+        return false;
+    }
+
+    if ($.trim($('#note_content').val())==="") {
+        alert('Nội dung ghi chú không được để trống ! Hãy nhập vào !');
+        document.addForm.content.focus();
+        return false;
+    }
+    
+    if (confirm('Bạn có chắc chắn muốn tạo thêm ghi chú mới không ?')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+</script>
+
+<h2>Thêm ghi chú mới</h2>
+<br />
+
+<form action="" method="post" name="addForm" id="addForm" onsubmit="return submitForm();" >
+<div style="padding: 10px;">
+<label style="font-weight: bold;font-size: medium;">Tiêu đề:</label>
+<br><br>
+<input type="text" name="title" id="note_title" value="<?php if (isset($note['title'])) { echo $note['title'];} else { echo ""; } ?>" />
+<br><br>
+<label style="font-weight: bold;font-size: medium;">Nội dung ghi chú:</label><br>
+<textarea name="content" id="note_content" rows="8"><?php if (isset($note['content'])) { echo $note['content']; } else { echo ""; } ?></textarea>
+<br><br>
+<input type="submit" name="editBtn" id="editBtn" value="Lưu nội dung" />
+</div>
+</form>
+
+<div style="margin-top: 10px;">
+<?php echo $this->Html->link('<< Quay trở về trang trước' , '/notes/' , array('target' => '_self')); ?>
+</div>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Tiếp theo ta sẽ thực hiện việc xóa ghi chú 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app/View/Notes/view.ctp
+<script>
+function editNote() {
+    if (confirm('Bạn có muốn chỉnh chửa nội dung ghi chú ?')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function deleteNote() {
+    if (confirm('Bạn có xóa ghi chú này hay không ?')) {
+        return true;
+    } else {
+        return false;
+    } 
+}
+</script>
+
+<h2><?php echo $note['Note']['title']; ?></h2>
+<br /><br />
+<div style="padding-left: 10px;">
+<?php echo str_replace("\n" , '<br>' , $note['Note']['content']); ?>
+</div>
+
+<div style="font-size: small;margin-top: 10px;">
+Ngày tạo: <?php echo $note['Note']['created']; ?> <br />
+Ngày chỉnh sửa: <?php echo $note['Note']['modified']; ?>
+</div>
+
+<div style="margin-top: 20px;">
+<?php echo $this->Html->link('Quay lại trang chủ' , '/notes/' , array('target' => '_self')); ?> 
+&nbsp;&nbsp;| &nbsp;&nbsp;
+<?php echo $this->Html->link(
+        'Chỉnh sửa nội dung ghi chú' , 
+        '/notes/edit/' . $note['Note']['id'] , 
+        array(
+                'target' => '_self' , 
+                'onclick' => 'return editNote();'
+        )); ?>
+&nbsp;&nbsp;| &nbsp;&nbsp;
+<?php echo $this->Html->link('Xóa ghi chú' , '/notes/delete/' . $note['Note']['id'] , array(
+        'onclick' => 'return deleteNote();'
+)); ?>
+</div>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+app/Controller/NotesController
+public function delete($id = null) {
+    $this->Note->id = $id;
+    
+    if ($this->Note->exists()) {
+        if ($this->Note->delete($id)) {
+            $this->Flash->success('Xóa ghi chú thành công !');
+            $this->redirect(array('controller' => 'notes' , 'action' => 'index'));
+        } else {
+            $this->Flash->success('Xóa ghi chú thất bại !');
+            $this->redirect(array('controller' => 'notes' , 'action' => 'view' , 'param1' => $id));
+        }
+    } else {
+        throw new NotFoundException('Không tìm thấy ghi chú này!');
+    }
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Chú ý: 
+
+Ở đây ta đã sử dụng jquery để thực hiện việc check empty cho textarea, nên trong file Layout/default.ctp
+ta cần khai báo sử dụng thư viện jquery như sau:
+echo $this->Html->script('jquery-3.1.0.min');
+Trong đó file js này ta sẽ download từ trên mạng và để vào thư mục webroot/js/jquery-3.1.0.min.js 
+
+
+
+Thế nhưng nếu cứ phải vào xem ghi chú mới sửa , xóa được note thì có vẻ bất tiện. Nên ta sẽ thêm vào ngay trang 
+chủ của phần hiển thị danh sách các ghi chú mục Sửa | Xóa bên cạnh tên ghi chú.
+
+
+
+
+Xác thực dữ liệu trong CakePHP
+Có 2 cách cơ bản
+1- Xác thực dữ liệu trong model , khi model thực hiện save dữ liệu bằng hàm save() , 
+thì cake sẽ kiểm tra các dữ liệu có hợp lệ hay không ? Nếu hợp lệ thì mới save.
 
 
 //******************************************************************************************************************************************************************
+Phần bổ sung: 
 
 <?php
 App::uses('AppController' , 'Controller');
 class NotesController extends  AppController{
-	public $name = "Notes"; // tên của Controller Note
-	
-	// Truy vấn không điều kiện
-	public function exam01(){
-		$data = $this->Note->find("all");
-		$this->set("data",$data);
-	}
-	
-	// Truy vấn có điều kiện 01 - Viết riêng thành 1 array điều kiện 
-	public function exam02() {
-		$conditions = array(
-				'conditions' => array(
-						'title LIKE' => "%PHP%"
-				) ,
-				'limit' => 5 ,
-				'order' => array(
-						'id DESC'
-				) ,
-		);
-		$data = $this->Note->find('all' , $conditions);
-		$this->set("data" , $data);
-		$this->render("exam01");
-	}
-	
-	// Truy vấn có điều kiện 02 - viết liền trong truy vấn
-	public function exam03() {
-		$data = $this->Note->find('all' , array(
-				'conditions' => array(
-						'description LIKE' => '%abc%'
-				),
-		));
-		
-		$this->set("data" , $data);
-		$this->render("exam01");
-	}
-	
-	// Truy vấn bằng query thực thi sql
-	public function exam04() {
-		$sql = "SELECT * FROM Notes WHERE description LIKE '%abc%' ";
-		$data = $this->Note->query($sql);
-		$this->set("data" , $data);
-	}
+    public $name = "Notes"; // tên của Controller Note
+    
+    // Truy vấn không điều kiện
+    public function exam01(){
+        $data = $this->Note->find("all");
+        $this->set("data",$data);
+    }
+    
+    // Truy vấn có điều kiện 01 - Viết riêng thành 1 array điều kiện 
+    public function exam02() {
+        $conditions = array(
+                'conditions' => array(
+                        'title LIKE' => "%PHP%"
+                ) ,
+                'limit' => 5 ,
+                'order' => array(
+                        'id DESC'
+                ) ,
+        );
+        $data = $this->Note->find('all' , $conditions);
+        $this->set("data" , $data);
+        $this->render("exam01");
+    }
+    
+    // Truy vấn có điều kiện 02 - viết liền trong truy vấn
+    public function exam03() {
+        $data = $this->Note->find('all' , array(
+                'conditions' => array(
+                        'description LIKE' => '%abc%'
+                ),
+        ));
+        
+        $this->set("data" , $data);
+        $this->render("exam01");
+    }
+    
+    // Truy vấn bằng query thực thi sql
+    public function exam04() {
+        $sql = "SELECT * FROM Notes WHERE description LIKE '%abc%' ";
+        $data = $this->Note->query($sql);
+        $this->set("data" , $data);
+    }
 }
 
 Trong ví dụ trên ta đã thực thi 3 kiểu truy vấn cơ bản thường sử dụng trong CakePHP
@@ -389,10 +680,10 @@ $this->Note->find(“all”);
 Thực thi gọi tới Model Note và lấy tất cả dữ liệu trả về trong database.
 * Truy vấn có điều kiện
 $conditions = array (
-	'conditions' => array() ,
-	'limit' => $limit_row ,
-	'fields' => array() ,
-	'order' => array() ,
+    'conditions' => array() ,
+    'limit' => $limit_row ,
+    'fields' => array() ,
+    'order' => array() ,
 );
 
 conditions nó là điều kiện lọc giống như phần where trong câu SQL
@@ -406,30 +697,30 @@ $result = $this->Note->query($sql);
 Nếu ta viết hàm thực thi bên trong model thì ta có thể viết như sau
 <?php 
 class Note extends AppModel {
-	public $name = "Note";
+    public $name = "Note";
 
-	public function getData01() {
-		$sql = "select * from Notes where description like '%abc%'";
-		$result = $this->query($sql);
-		
-		return $result;
-	}
-	
-	public function getData02() {
-		return $this->find('all' , array(
-				'conditions' => array(
-						'description LIKE' => '%abc%' ,
-				) ,
-		));
-	}
+    public function getData01() {
+        $sql = "select * from Notes where description like '%abc%'";
+        $result = $this->query($sql);
+        
+        return $result;
+    }
+    
+    public function getData02() {
+        return $this->find('all' , array(
+                'conditions' => array(
+                        'description LIKE' => '%abc%' ,
+                ) ,
+        ));
+    }
 }
 
 <?php
 class NotesController extends AppController {
-	public function exam05() {
-		$result = $this->Note->getData();
-		$this->set("data" , $result);
-	}
+    public function exam05() {
+        $result = $this->Note->getData();
+        $this->set("data" , $result);
+    }
 }
 
 - Các hàm truy vấn CSDL thực thi từ Controller:
