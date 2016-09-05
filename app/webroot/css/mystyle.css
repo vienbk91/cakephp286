@@ -6,3 +6,7 @@ h2 {
 a {
     text-decoration: none;
 }
+
+ul , li {
+	margin: 10px 12px;
+}
