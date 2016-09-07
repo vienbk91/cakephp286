@@ -74,13 +74,13 @@ Bài 1: Tổng quan về CakePHP
 – Tên file sử dụng chữ thường, viết hoa chữ cái phân cách các từ: CategoriesController.php, DataComponent.php, Category.php, SessionHelper.php.
 – Tên class viết hoa chữ cái đầu tiên của từ.
 – Xem cách đặt tên ở bảng dưới đây:
--------------------------------------------------------------------------
-                    Tên file                     Tên Class              |
+________________________________________________________________________
+___________________Tên file______________________Tên Class______________|
 Controller |    CategoriesController.php        CategoriesController    |
 Component  |    DataComponent.php               DataComponent           |
 Model      |    Category.php                    Category                |
 Helper     |    SessionHelper.php               Session                 |
--------------------------------------------------------------------------
+___________|____________________________________________________________|
 
 Quy ước về cơ sở dữ liệu và Model:
 – Tên các class trong Model phải ở dạng số ít và viết hoa chữ cái đầu tiên: Category, User…
@@ -158,6 +158,8 @@ Tất cả các thư mục trong CakePHP thì trừ tmp và webroot thì các fo
 
 Tiếp theo ta sẽ đi làm demo đơn giản với CakePHP để hiểu hơn về mô hình làm việc MVC này: 
 
+/* Tạo database demo */
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 CREATE TABLE IF NOT EXISTS notes (
   id int(11) NOT NULL AUTO_INCREMENT,
   title varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -173,7 +175,7 @@ INSERT INTO notes (id, title, content, created, modified) VALUES
 (3, 'Mô hình MVC trong CakePHP', '- Giới thiệu sơ lược mô hình MVC\r\n- Chức năng của Model - View - Controller trong CakePHP\r\n- Cách thức hoạt động của Mô hình MVC trong CakePHP', '2013-01-13 09:12:48', '2013-01-28 12:57:40'),
 (4, 'Tạo website đơn giản bằng CakePHP - ChickenRain Notes', '- Tạo shortcut cake console\r\n- Tạo CSDL\r\n- Tạo thư mục project từ giao diện dòng lệnh\r\n- Tạo bảng notes trong DB bằng SQL\r\n- Insert thêm dữ liệu vào DB', '2013-01-13 12:10:09', '2013-01-13 12:10:09'),
 (5, 'Tạo trang index notes cho ChickenRain Notes', '- Tạo Model Note.php\r\n- Tạo controller NotesController.php\r\n- Viết function index() đặt trong NotesController:\r\n  + Dùng find(''all'') để lấy dữ liệu từ DB\r\n  + Gởi dữ liệu lên view thông qua set()\r\n- Tạo view index.ctp đặt trong View/Notes\r\n- Chạy thử', '2013-01-13 14:10:09', '2013-02-19 13:03:53');
-
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Trong thư mục app/Model/ tạo file Note.php (Tên file là số ít của tên table trong csdl , chữ cái đầu viết hoa ) với nội dung sau:
 Model là 1 class và tên class phải trùng với tên file, nghĩa là cũng là tên số ít của table trong csdl.
@@ -218,6 +220,7 @@ Kết quả sẽ hiển thị dòng text với nội dung như trên: Hello Cake
 
 Tiếp theo ta sẽ lấy dữ liệu từ database và hiển thị nó ra view 
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 <?php
 App::uses( 'AppController', 'Controller' ) ;
 class NotesController extends AppController {
@@ -237,9 +240,11 @@ class NotesController extends AppController {
     }
 }
 ?>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Làm sao để truyền data từ controller đến view
 Sửa nội dung file index.ctp
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 <h2>Danh sach cac Note</h2>
 <?php 
 foreach ($notes as $item):
@@ -254,6 +259,7 @@ foreach ($notes as $item):
 <?php 
 endforeach;
 ?>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Thực hiện truy cập đến URL: http://localhost/cakephp286/notes/index/ và xem kết quả
 
@@ -314,6 +320,7 @@ $notes = $this->Note->find('all' , array(
         ));
 
 Bây giờ ta sẽ tạo ra trang view để hiển thị cho nội dung từng note 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 <h2>Danh sách ghi chú</h2>
 <?php 
 foreach ($notes as $item):
@@ -328,6 +335,7 @@ foreach ($notes as $item):
 <?php 
 endforeach;
 ?>
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Ở đây ta sử helper Html->link của CakePHP để thay thế cho việc viết trực tiếp thẻ <a>
 $this->Html->link('tên link' , 'url' , option); // Các option sẽ được đặt trong 1 mảng với key là các thuộc tính, value là các option tương ứng thuộc tính 
